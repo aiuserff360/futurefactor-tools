@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FutureFactor360 Tools</title>
+  <meta name="description" content="FutureFactor360 proprietary tools and demos: GCC Command Center, Business Case Builder, Portfolio & Footprint Modeller, Talent Market Intelligence." />
+  <link rel="icon" href="assets/futurefactor-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy-900: #0B2240; --navy-800: #10305A; --navy-700: #163C70;
+      --brand-600: #1E5BBE; --brand-500: #2B6FD6; --brand-400: #5B9BF0; --brand-100: #E4EEFB; --brand-50: #F0F5FD;
+      --surface: #F3F6FB; --line: #E3E8F0; --card: #FFFFFF;
+      --ink-900: #111827; --ink-700: #374151; --ink-500: #6B7280; --ink-400: #9CA3AF;
+      --teal: #14B8A6; --good: #16A34A; --warn: #F59E0B;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--surface); color: var(--ink-900); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    .topbar { background: #fff; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; }
+    .topbar-inner { max-width: 1180px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand img { height: 36px; width: auto; display: block; }
+    .brand .sep { width: 1px; height: 28px; background: var(--line); }
+    .brand .title { white-space: nowrap; font-size: 15px; font-weight: 600; color: var(--ink-900); letter-spacing: -0.01em; }
+    .brand .title span { color: var(--ink-500); font-weight: 500; }
+    .topbar .meta { font-size: 12.5px; color: var(--ink-500); }
+
+    .hero { background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 60%, var(--brand-600) 100%); color: #fff; }
+    .hero-inner { max-width: 1180px; margin: 0 auto; padding: 56px 24px 48px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brand-300, #9CC3F7); margin-bottom: 14px; }
+    .eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--teal); }
+    .hero h1 { font-size: 40px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 14px; }
+    .hero p { font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.82); max-width: 720px; margin: 0; }
+    .hero-stats { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 30px; }
+    .hero-stats div { font-size: 13px; color: rgba(255,255,255,0.75); }
+    .hero-stats strong { display: block; font-size: 24px; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
+
+    main { max-width: 1180px; margin: 0 auto; padding: 36px 24px 56px; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { border: 1px solid var(--line); background: #fff; color: var(--ink-700); border-radius: 999px; padding: 6px 12px; font-size: 12.5px; font-weight: 500; cursor: pointer; }
+    .chip[aria-pressed="true"] { background: var(--navy-800); border-color: var(--navy-800); color: #fff; }
+    .search { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 8px 12px; font: inherit; font-size: 13px; min-width: 240px; color: var(--ink-900); outline: none; }
+    .search:focus { border-color: var(--brand-400); box-shadow: 0 0 0 3px var(--brand-100); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 22px 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(16,24,40,0.04); transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; position: relative; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(16,24,40,0.08); border-color: var(--brand-300, #9CC3F7); }
+    .card.featured { grid-column: span 2; background: linear-gradient(180deg, #fff 0%, var(--brand-50) 100%); }
+    @media (max-width: 760px) { .card.featured { grid-column: span 1; } }
+    .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .cat { font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-600); }
+    .status { font-size: 11.5px; font-weight: 600; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+    .status.live { background: #DCFCE7; color: #166534; }
+    .status.dev { background: #FEF3C7; color: #92400E; }
+    .status.soon { background: var(--brand-100); color: var(--navy-800); }
+    .card h2 { margin: 2px 0 0; font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+    .card .tagline { font-size: 13.5px; font-weight: 500; color: var(--ink-700); margin: 0; }
+    .card .desc { font-size: 13.5px; line-height: 1.55; color: var(--ink-500); margin: 0; }
+    .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .card li { font-size: 13px; color: var(--ink-700); padding-left: 18px; position: relative; }
+    .card li::before { content: ""; position: absolute; left: 0; top: 7px; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+    .card-foot { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .signin { font-size: 12px; color: var(--ink-500); }
+    .signin b { color: var(--ink-700); font-weight: 600; }
+    .open { display: inline-flex; align-items: center; gap: 8px; background: var(--brand-600); color: #fff; border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 600; }
+    .open:hover { background: var(--brand-500); }
+    .open svg { width: 14px; height: 14px; }
+    .empty { grid-column: 1 / -1; text-align: center; color: var(--ink-500); font-size: 14px; padding: 40px 0; }
+
+    footer { border-top: 1px solid var(--line); background: #fff; }
+    .footer-inner { max-width: 1180px; margin: 0 auto; padding: 22px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--ink-500); }
+    .footer-inner b { color: var(--ink-700); font-weight: 600; }
+    @media (max-width: 640px) { .topbar .meta { display: none; } .hero h1 { font-size: 30px; } .hero-inner { padding: 40px 16px 36px; } main, .topbar-inner, .footer-inner { padding-left: 16px; padding-right: 16px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./">
+        <img src="assets/futurefactor-logo.png" alt="FutureFactor360" />
+        <span class="sep"></span>
+        <span class="title">Proprietary Tools <span>&amp; Demos</span></span>
+      </a>
+      <div class="meta">Internal and client demonstrations · Confidential</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">FutureFactor360</div>
+      <h1>One place for every FutureFactor tool.</h1>
+      <p>Interactive platforms built by FutureFactor360 for designing, costing, staffing and running Global Capability Centres. Pick a tool below to open the live demo.</p>
+      <div class="hero-stats">
+        <div><strong id="stat-tools">0</strong>Tools</div>
+        <div><strong id="stat-live">0</strong>Live demos</div>
+        <div><strong id="stat-cats">0</strong>Practice areas</div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="toolbar">
+      <div class="chips" id="chips"></div>
+      <input class="search" id="search" type="search" placeholder="Search tools…" aria-label="Search tools" />
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><b>FutureFactor360</b> · Proprietary tools and demonstrations. Demo data is illustrative.</div>
+      <div>© <span id="year"></span> FutureFactor360. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="tools.js"></script>
+  <script>
+    (function () {
+      var tools = window.FF360_TOOLS || [];
+      var grid = document.getElementById('grid');
+      var chips = document.getElementById('chips');
+      var search = document.getElementById('search');
+      var activeCat = 'All';
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      var cats = ['All'].concat(tools.map(function (t) { return t.category; }).filter(function (c, i, a) { return a.indexOf(c) === i; }));
+      document.getElementById('stat-tools').textContent = tools.length;
+      document.getElementById('stat-live').textContent = tools.filter(function (t) { return t.status === 'Live'; }).length;
+      document.getElementById('stat-cats').textContent = cats.length - 1;
+
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function statusClass(s) { return s === 'Live' ? 'live' : s === 'In development' ? 'dev' : 'soon'; }
+
+      function renderChips() {
+        chips.innerHTML = cats.map(function (c) {
+          return '<button class="chip" type="button" data-cat="' + esc(c) + '" aria-pressed="' + (c === activeCat) + '">' + esc(c) + '</button>';
+        }).join('');
+      }
+
+      function render() {
+        var q = search.value.trim().toLowerCase();
+        var list = tools.filter(function (t) {
+          if (activeCat !== 'All' && t.category !== activeCat) return false;
+          if (!q) return true;
+          return (t.name + ' ' + t.tagline + ' ' + t.description + ' ' + t.highlights.join(' ') + ' ' + t.category).toLowerCase().indexOf(q) !== -1;
+        });
+        if (!list.length) { grid.innerHTML = '<div class="empty">No tools match. Try another search.</div>'; return; }
+        grid.innerHTML = list.map(function (t) {
+          var open = t.status === 'Coming soon' ? '' :
+            '<a class="open" href="' + esc(t.url) + '" target="_blank" rel="noopener">Open demo <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13 13 7M8 7h5v5"/></svg></a>';
+          return '<article class="card' + (t.featured ? ' featured' : '') + '">' +
+            '<div class="card-head"><span class="cat">' + esc(t.category) + '</span><span class="status ' + statusClass(t.status) + '">' + esc(t.status) + '</span></div>' +
+            '<h2>' + esc(t.name) + '</h2>' +
+            '<p class="tagline">' + esc(t.tagline) + '</p>' +
+            '<p class="desc">' + esc(t.description) + '</p>' +
+            '<ul>' + t.highlights.map(function (h) { return '<li>' + esc(h) + '</li>'; }).join('') + '</ul>' +
+            '<div class="card-foot"><span class="signin"><b>Sign in:</b> ' + esc(t.signIn) + (t.updated ? ' · Updated ' + esc(t.updated) : '') + '</span>' + open + '</div>' +
+            '</article>';
+        }).join('');
+      }
+
+      chips.addEventListener('click', function (e) {
+        var b = e.target.closest('.chip'); if (!b) return;
+        activeCat = b.getAttribute('data-cat'); renderChips(); render();
+      });
+      search.addEventListener('input', render);
+      renderChips(); render();
+    })();
+  </script>
+</body>
+</html>
